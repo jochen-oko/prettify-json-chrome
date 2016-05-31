@@ -1,0 +1,3 @@
+[] handle incomplete json
+[] handle larger selections
+[] otions page to customize replacement patterns (currently, all \n and \t are replaced)
