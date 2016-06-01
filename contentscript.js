@@ -8,7 +8,17 @@ var PrettyPrinter = function() {
 		 * creates a pretty representation of the given text.
 		 */
 		var prettyPrintSelection = function( text ) {
-			return syntaxHighlight(JSON.stringify(JSON.parse(text), undefined, 4));
+
+			var json = JSON.parse(text);
+			// console.log("completed json parsing: ", json);
+
+			var stringified = JSON.stringify(json, undefined, 4);
+			// console.log("completed json stringification: ", stringified);
+
+			var highlighted = syntaxHighlight(stringified);
+			// console.log("completed json highlight: ", highlighted);
+
+			return highlighted;
 		}
 
     // thank you: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
@@ -31,54 +41,53 @@ var PrettyPrinter = function() {
 		    });
 		}
 
+		function getSelectedNode(isStart) {
+				var range, sel, container;
+
+				sel = window.getSelection();
+				if (sel.getRangeAt) {
+						if (sel.rangeCount > 0) {
+								range = sel.getRangeAt(0);
+						}
+				} else {
+						range = document.createRange();
+						range.setStart(sel.anchorNode, sel.anchorOffset);
+						range.setEnd(sel.focusNode, sel.focusOffset);
+
+						// Handle the case when the selection was selected backwards (from the end to the start in the document)
+						if (range.collapsed !== sel.isCollapsed) {
+								range.setStart(sel.focusNode, sel.focusOffset);
+								range.setEnd(sel.anchorNode, sel.anchorOffset);
+						}
+			 }
+
+				if (range) {
+					 container = range[isStart ? "startContainer" : "endContainer"];
+
+					 // Check if the container is a text node and return its parent if so
+					 return container.nodeType === 3 ? container.parentNode : container;
+				}
+
+		}
+
     /**
-    * Changes the page and includes the pretty printed text.
-    **/
+     * Changes the page and includes the pretty printed text.
+     **/
     var prettify = function( selection ) {
 
 			  var prettyText = prettyPrintSelection(selection);
+				var prettyNode = document.createElement("div");
+				var preNode = document.createElement('pre');
+				preNode.style.cssText="outline: 1px solid #ccc; padding: 5px; margin: 5px;";
+				prettyNode.appendChild(preNode).innerHTML = prettyText;
 
-				insertElement(document.body, selection, function(node, match, offset) {
-            var prettyNode = document.createElement("div");
-						var preNode = document.createElement('pre');
-						preNode.style.cssText="outline: 1px solid #ccc; padding: 5px; margin: 5px;";
-            prettyNode.appendChild(preNode).innerHTML = prettyText;
-            return prettyNode;
-        });
+				var selectedNode = getSelectedNode();
+				console.log("found a match: ", selectedNode.innerHTML.trim().indexOf(selection.trim()) > -1);
+				selectedNode.innerHTML = selectedNode.innerHTML.replace(
+					selection.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').trim(),
+					prettyNode.innerHTML.trim()
+				);
     }
-
-		var insertElement = function(node, selection, callback, excludeElements) {
-
-        excludeElements || (excludeElements = ['script', 'style', 'a', 'form', 'iframe', 'canvas']);
-        var child = node.firstChild;
-
-        while (child) {
-            switch (child.nodeType) {
-            case 1:
-                if (excludeElements.indexOf(child.tagName.toLowerCase()) > -1)
-                    break;
-                insertElement(child, selection, callback, excludeElements);
-                break;
-            case 3:
-                var bk = 0;
-                child.data.replace(selection, function(all) {
-                    var args = [].slice.call(arguments),
-                        offset = args[args.length - 2],
-                        newTextNode = child.splitText(offset+bk), tag;
-                    bk -= child.data.length + all.length;
-
-                    newTextNode.data = newTextNode.data.substr(all.length);
-                    tag = callback.apply(window, [child].concat(args));
-                    child.parentNode.insertBefore(tag, newTextNode);
-                    child = newTextNode;
-                });
-                break;
-            }
-            child = child.nextSibling;
-        }
-
-        return node;
-    };
 
     self.prettify = prettify;
     return self;

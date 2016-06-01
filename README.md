@@ -21,5 +21,4 @@ The Extension is installed now until you disable or remove it.
 3) click the awesome icon next to your address bar, labeled {p}
 
 ## Next steps:
-* do something better than nothing, if no json at all or no valid json was selected
-* handle larger selections
+* do something better than nothing, if no json at all or invalid json was selected
