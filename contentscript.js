@@ -39,9 +39,10 @@ var PrettyPrinter = function() {
 			  var prettyText = prettyPrintSelection(selection);
 
 				insertElement(document.body, selection, function(node, match, offset) {
-            var prettyNode = document.createElement("span");
-            prettyNode.appendChild(document.createElement('pre')).innerHTML = prettyText;
-            prettyNode.className="prettyText";
+            var prettyNode = document.createElement("div");
+						var preNode = document.createElement('pre');
+						preNode.style.cssText="outline: 1px solid #ccc; padding: 5px; margin: 5px;";
+            prettyNode.appendChild(preNode).innerHTML = prettyText;
             return prettyNode;
         });
     }

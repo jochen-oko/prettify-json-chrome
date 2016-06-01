@@ -1,6 +1,15 @@
 # Json-prettyprinter
-chrome-extension to pretty print a selection of json.
+chrome-extension to pretty print a selection of json directly inside the web page.
 
+## Example
+See this example log message from kibana
+![alt text](./img/step-1.png "ugly json")
+
+Select the whole json with the mouse
+![alt text](./img/step-2.png "selected")
+
+Be happy
+![alt text](./img/step-3.png "smoking awesome")
 
 ## Installation:
 Open chrome://extensions/ and click 'Load unpacked extensions'. Select the cloned repo path there.
