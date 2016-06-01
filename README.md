@@ -8,7 +8,7 @@ See this example log message from kibana
 Select the whole json with the mouse
 ![alt text](./img/step-2.png "selected")
 
-Be happy
+Click the icon ![alt text](./icon.png "{p}") and be happy
 ![alt text](./img/step-3.png "smoking awesome")
 
 ## Installation:
