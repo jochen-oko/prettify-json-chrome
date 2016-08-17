@@ -2,7 +2,7 @@
 
 var PrettyPrinter = function() {
 
-	var self = {};
+		var self = {};
 
 		/**
 		 * creates a pretty representation of the given text.
@@ -21,7 +21,7 @@ var PrettyPrinter = function() {
 			return highlighted;
 		}
 
-    // thank you: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
+		// thank you: http://stackoverflow.com/questions/4810841/how-can-i-pretty-print-json-using-javascript
 		function syntaxHighlight(json) {
 		    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 		    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
@@ -70,27 +70,24 @@ var PrettyPrinter = function() {
 
 		}
 
-    /**
-     * Changes the page and includes the pretty printed text.
-     **/
-    var prettify = function( selection ) {
+	  /**
+	   * Changes the page and includes the pretty printed text.
+	   **/
+	  var prettify = function( selection ) {
 
 			  var prettyText = prettyPrintSelection(selection);
 				var prettyNode = document.createElement("div");
 				var preNode = document.createElement('pre');
-				preNode.style.cssText="outline: 1px solid #ccc; padding: 5px; margin: 5px;";
+				preNode.style.cssText="outline: 1px solid #ccc; padding: 5px; margin: 5px; width: 100%; display: block;";
 				prettyNode.appendChild(preNode).innerHTML = prettyText;
 
 				var selectedNode = getSelectedNode();
-				console.log("found a match: ", selectedNode.innerHTML.trim().indexOf(selection.trim()) > -1);
-				selectedNode.innerHTML = selectedNode.innerHTML.replace(
-					selection.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').trim(),
-					prettyNode.innerHTML.trim()
-				);
-    }
+				selectedNode.innerHTML=prettyNode.innerHTML.trim();
 
-    self.prettify = prettify;
-    return self;
+	  }
+
+	  self.prettify = prettify;
+	  return self;
 }
 
 /*
